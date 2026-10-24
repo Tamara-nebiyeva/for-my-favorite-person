@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday, My Player 1! 💙🎮</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --sky-blue: #bde0fe;
+      --deep-blue: #1d4e89;
+      --card-bg: #f0f7ff;
+      --accent-blue: #0077b6;
+      --pixel-yellow: #fff3b0;
+      --pixel-mint: #c7f9cc;
+      --dark-border: #0b132b;
+      --pixel-shadow: 4px 4px 0px var(--dark-border);
+      --pixel-shadow-lg: 6px 6px 0px var(--dark-border);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Press Start 2P', monospace;
+      background-color: var(--sky-blue);
+      color: var(--dark-border);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: 
+        radial-gradient(#90caf9 20%, transparent 20%),
+        radial-gradient(#90caf9 20%, transparent 20%);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+      position: relative;
+    }
+
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .kawaii-particle {
+      position: absolute;
+      bottom: -40px;
+      animation: floatUp 8s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ================= 1. GİRİŞ ŞİFRƏ PANELİ (2510) ================= */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(189, 224, 254, 0.98);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .arcade-box {
+      background: var(--card-bg);
+      border: 4px solid var(--dark-border);
+      box-shadow: var(--pixel-shadow-lg);
+      padding: 22px 18px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      border-radius: 4px;
+      animation: popIn 0.4s ease-out;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .arcade-mascot {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .arcade-title {
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--deep-blue);
+      margin-bottom: 8px;
+    }
+
+    .arcade-sub {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      margin-bottom: 14px;
+      color: #444;
+    }
+
+    .pin-display {
+      background: #0b132b;
+      color: var(--pixel-mint);
+      border: 4px solid var(--dark-border);
+      padding: 12px;
+      font-size: 24px;
+      letter-spacing: 12px;
+      margin-bottom: 16px;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 0 8px rgba(199, 249, 204, 0.9);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .key-btn {
+      background: #fff;
+      border: 3px solid var(--dark-border);
+      box-shadow: var(--pixel-shadow);
+      padding: 12px 0;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--dark-border);
+    }
+
+    .key-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--dark-border);
+    }
+
+    .key-btn.action-btn {
+      background: var(--pixel-yellow);
+      font-size: 11px;
+    }
+
+    .key-btn.enter-btn {
+      background: var(--pixel-mint);
+      font-size: 11px;
+    }
+
+    .error-shake {
+      animation: shake 0.3s ease-in-out;
+      border-color: #e63946 !important;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    #qrUnlockSection {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .qr-open-btn {
+      background: var(--deep-blue);
+      color: #fff;
+      border: 3px solid var(--dark-border);
+      padding: 14px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: var(--pixel-shadow);
+    }
+
+    /* ================= 2. ƏSAS DASHBOARD ================= */
+    #main-dashboard {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 16px 20px;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .app-header {
+      background: #fff;
+      border: 4px solid var(--dark-border);
+      box-shadow: var(--pixel-shadow);
+      padding: 10px 14px;
+      text-align: center;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .app-header h1 {
+      font-size: 12px;
+      color: var(--deep-blue);
+      line-height: 1.6;
+    }
+
+    .app-header p {
+      font-family: 'VT323', monospace;
+      font-size: 19px;
+      color: #555;
+    }
+
+    .bgm-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--pixel-yellow);
+      border: 2px solid var(--dark-border);
+      padding: 6px 8px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      cursor: pointer;
+    }
+
+    /* TAB DÜYMƏLƏRİ */
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+      flex-shrink: 0;
+      margin-bottom: -4px;
+      z-index: 2;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: #cfe2f3;
+      border: 4px solid var(--dark-border);
+      border-bottom: none;
+      padding: 12px 4px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      cursor: pointer;
+      color: #0b132b;
+      text-align: center;
+      transition: all 0.1s;
+    }
+
+    .tab-btn.active {
+      background: #fff;
+      color: var(--deep-blue);
+      padding-top: 14px;
+      transform: translateY(-2px);
+    }
+
+    /* ƏSAS PƏNCƏRƏ */
+    .content-window {
+      background: #fff;
+      border: 4px solid var(--dark-border);
+      box-shadow: var(--pixel-shadow-lg);
+      flex: 1;
+      width: 100%;
+      padding: 16px;
+      position: relative;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab-panel {
+      display: none;
+      height: 100%;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .tab-panel.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ================= KART 1: MƏKTUB ================= */
+    .letter-wrapper {
+      background: #f7fbff;
+      border: 3px dashed var(--accent-blue);
+      padding: 22px 18px;
+      border-radius: 4px;
+      position: relative;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .postage-stamp {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      border: 2px solid var(--deep-blue);
+      background: #d0e8ff;
+      padding: 6px 10px;
+      font-size: 8px;
+      color: var(--deep-blue);
+      transform: rotate(5deg);
+    }
+
+    .letter-heading {
+      font-size: 13px;
+      color: var(--deep-blue);
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--sky-blue);
+      padding-bottom: 8px;
+    }
+
+    .letter-body {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      line-height: 1.6;
+      color: #0b132b;
+      white-space: pre-wrap;
+    }
+
+    /* ================= KART 2: 8 ŞƏKİL (4 YUXARI, 4 AŞAĞI) ================= */
+    .gallery-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 4px 16px;
+    }
+
+    .gallery-title {
+      font-size: 11px;
+      color: var(--deep-blue);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .gallery-grid-8 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .polaroid {
+      background: #fff;
+      padding: 8px 8px 14px 8px;
+      border: 3px solid var(--dark-border);
+      box-shadow: 4px 4px 0px rgba(11, 19, 43, 0.2);
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .polaroid:hover {
+      transform: scale(1.04) rotate(0deg) !important;
+      box-shadow: 6px 6px 0px var(--dark-border);
+      z-index: 5;
+    }
+
+    .washi {
+      position: absolute;
+      top: -9px;
+      left: 28%;
+      width: 55px;
+      height: 18px;
+      background: rgba(189, 224, 254, 0.9);
+      border: 1px dashed rgba(11, 19, 43, 0.35);
+      transform: rotate(-3deg);
+      z-index: 2;
+    }
+
+    .polaroid-img {
+      width: 100%;
+      height: 155px;
+      overflow: hidden;
+      border: 2px solid #cce3de;
+      background: #edf6f9;
+    }
+
+    .polaroid-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .polaroid-caption {
+      font-family: 'VT323', monospace;
+      font-size: 19px;
+      text-align: center;
+      margin-top: 8px;
+      color: var(--dark-border);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ================= KART 3: XÜSUSİ KLİK KARTI (HE'S MY MAN) ================= */
+    .portal-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: #070d1e;
+      border: 4px solid var(--dark-border);
+      box-shadow: var(--pixel-shadow);
+      border-radius: 4px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portal-badge {
+      background: var(--sky-blue);
+      color: var(--deep-blue);
+      border: 2px solid var(--dark-border);
+      padding: 6px 12px;
+      font-size: 9px;
+      margin-bottom: 16px;
+      display: inline-block;
+      box-shadow: var(--pixel-shadow);
+    }
+
+    .portal-title {
+      font-size: 14px;
+      color: var(--pixel-yellow);
+      line-height: 1.8;
+      margin-bottom: 12px;
+      text-shadow: 0 0 10px rgba(255, 243, 176, 0.7);
+    }
+
+    .portal-desc {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      color: #cfe2f3;
+      max-width: 520px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    /* ƏSAS KLİK DÜYMƏSİ */
+    .magic-play-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #38a3a5, #0077b6);
+      color: #fff;
+      text-decoration: none;
+      border: 4px solid #fff;
+      box-shadow: 0 0 0 4px var(--dark-border), 6px 6px 0px var(--dark-border);
+      padding: 18px 24px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      animation: pulseBtn 2s infinite;
+    }
+
+    .magic-play-link:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #0077b6, #1d4e89);
+      box-shadow: 0 0 0 4px #fff, 8px 8px 0px var(--dark-border);
+    }
+
+    .magic-play-link:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 4px var(--dark-border), 3px 3px 0px var(--dark-border);
+    }
+
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); filter: drop-shadow(0 0 12px #38a3a5); }
+    }
+
+    .portal-footer {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      color: #8da4c4;
+      margin-top: 20px;
+    }
+
+    /* LIGHTBOX MODAL */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 19, 43, 0.88);
+      z-index: 300;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .lightbox-box {
+      background: #fff;
+      border: 4px solid var(--dark-border);
+      padding: 12px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .lightbox-box img {
+      width: 100%;
+      max-height: 60vh;
+      object-fit: contain;
+      border: 2px solid var(--dark-border);
+    }
+
+    .lightbox-text {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    .close-btn {
+      margin-top: 12px;
+      background: var(--deep-blue);
+      color: #fff;
+      border: 3px solid var(--dark-border);
+      padding: 8px 16px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .gallery-grid-8 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .polaroid-img {
+        height: 140px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #main-dashboard {
+        padding: 8px 8px 12px;
+      }
+      .tab-btn {
+        font-size: 7px;
+        padding: 10px 2px;
+      }
+      .app-header h1 {
+        font-size: 11px;
+      }
+      .letter-body {
+        font-size: 20px;
+      }
+      .portal-title {
+        font-size: 12px;
+      }
+      .portal-desc {
+        font-size: 19px;
+      }
+      .magic-play-link {
+        font-size: 8.5px;
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Kawaii Pixel Ulduzlar və Pişiklər -->
+  <div class="bg-particles" id="particles-container"></div>
+
+  <!-- ================= 1. GİRİŞ ŞİFRƏ PANELİ (2510) ================= -->
+  <div id="lock-screen">
+    <div class="arcade-box">
+      <div class="arcade-mascot">(=^･ω･^=) 💙 ✨</div>
+      <div class="arcade-title">Mystery</div>
+      <div class="arcade-sub" id="lockSubtitle">Guess the code Bebitomm</div>
+      
+      <div id="pinSection">
+        <div class="pin-display" id="pinDisplay">----</div>
+
+        <div class="keypad">
+          <button class="key-btn" onclick="pressKey('1')">1</button>
+          <button class="key-btn" onclick="pressKey('2')">2</button>
+          <button class="key-btn" onclick="pressKey('3')">3</button>
+          <button class="key-btn" onclick="pressKey('4')">4</button>
+          <button class="key-btn" onclick="pressKey('5')">5</button>
+          <button class="key-btn" onclick="pressKey('6')">6</button>
+          <button class="key-btn" onclick="pressKey('7')">7</button>
+          <button class="key-btn" onclick="pressKey('8')">8</button>
+          <button class="key-btn" onclick="pressKey('9')">9</button>
+          <button class="key-btn action-btn" onclick="clearPin()">C</button>
+          <button class="key-btn" onclick="pressKey('0')">0</button>
+          <button class="key-btn enter-btn" onclick="checkPin()">OK</button>
+        </div>
+        <div style="font-size: 7.5px; color: #666; margin-top: 14px;">Ipucu:önemli birinin doğum günü ✨</div>
+      </div>
+
+      <div id="qrUnlockSection">
+        <button class="qr-open-btn" onclick="unlockApp()">🎁 SÜRPRİZİ AÇ VƏ BAŞLAT ✨</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= 2. ƏSAS DASHBOARD ================= -->
+  <div id="main-dashboard">
+    
+    <div class="app-header">
+      <h1>AD GÜNÜN MÜBARƏKKK MINNOŞUMMMM! 🎉</h1>
+      <p>Birtanecik BEBEYİMEEEE 💙</p>
+      <button class="bgm-btn" id="bgmToggleBtn" onclick="toggleBdayMusic()">🎵 BGM: AÇIQ</button>
+    </div>
+
+    <!-- TAB PANELİ -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab(0)">💌 1. MƏKTUB</button>
+      <button class="tab-btn" onclick="switchTab(1)">📸 2. BİZZZZ (8)</button>
+      <button class="tab-btn" onclick="switchTab(2)">🎵 3. Seni düşünende ağlıma gelen mahnı</button>
+    </div>
+
+    <div class="content-window">
+      
+      <!-- ================= KART 1: MƏKTUB ================= -->
+      <div class="tab-panel active" id="tab-0">
+        <div class="letter-wrapper">
+          <div class="postage-stamp">MY MAN 🎂</div>
+          <div class="letter-heading">Ad Günün Mübarək, Sevgilim! 💙</div>
+          <div class="letter-body" id="letterText"></div>
+        </div>
+      </div>
+
+      <!-- ================= KART 2: DƏQİQ 8 ŞƏKİL (4 YUXARI, 4 AŞAĞI) ================= -->
+      <div class="tab-panel" id="tab-1">
+        <div class="gallery-container">
+          <div class="gallery-title">✨ Bizzzzzz ✨</div>
+          
+          <div class="gallery-grid-8">
+            
+            <!-- SƏTİR 1: YUXARIDAKİ 4 ŞƏKİL -->
+            <div class="polaroid" style="transform: rotate(-2deg);" onclick="openLightbox(this)">
+              <div class="washi"></div>
+              <div class="polaroid-img">
+                <img src="img1.png"alt="1">
+              </div>
+              <div class="polaroid-caption">Happy</div>
+            </div>
+
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 35%;"></div>
+              <div class="polaroid-img">
+                <img src="img2.png" alt="2">
+              </div>
+              <div class="polaroid-caption"> Birthh</div>
+            </div>
+
+            <div class="polaroid" style="transform: rotate(-3deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(255, 243, 176, 0.9); left: 25%;"></div>
+              <div class="polaroid-img">
+                <img src="img3.png" alt="3">
+              </div>
+              <div class="polaroid-caption">Dayyyy</div>
+            </div>
+
+            <div class="polaroid" style="transform: rotate(3deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(189, 224, 254, 0.9); left: 32%;"></div>
+              <div class="polaroid-img">
+                <img src="img4.png" alt="4">
+              </div>
+              <div class="polaroid-caption">My</div>
+            </div>
+
+            <!-- SƏTİR 2: AŞAĞIDAKI 4 ŞƏKİL -->
+            <div class="polaroid" style="transform: rotate(-2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 30%;"></div>
+              <div class="polaroid-img">
+                <img src="img5.png" alt="5">
+              </div>
+              <div class="polaroid-caption">Huggyyy💫</div>
+            </div>
+
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(255, 243, 176, 0.9); left: 38%;"></div>
+              <div class="polaroid-img">
+                <img src="img6.png" alt="6">
+              </div>
+              <div class="polaroid-caption">Wuggyyyyy</div>
+            </div>
+
+            <div class="polaroid" style="transform: rotate(-3deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(189, 224, 254, 0.9); left: 26%;"></div>
+              <div class="polaroid-img">
+                <img src="img7.png" alt="7">
+              </div>
+              <div class="polaroid-caption">Cutieee</div>
+            </div>
+
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img8.png" alt="8">
+              </div>
+              <div class="polaroid-caption">Patutieee</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img9.png" alt="8">
+              </div>
+              <div class="polaroid-caption">Littleee</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img10.png" alt="8">
+              </div>
+              <div class="polaroid-caption">Babyy</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img11.png" alt="8">
+              </div>
+              <div class="polaroid-caption">🥰</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img12.png" alt="8">
+              </div>
+              <div class="polaroid-caption">🥰</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img13.png" alt="8">
+              </div>
+              <div class="polaroid-caption">🥰</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img14.png" alt="8">
+              </div>
+              <div class="polaroid-caption">🥰</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img15.png" alt="8">
+              </div>
+              <div class="polaroid-caption">🥰</div>
+            </div>
+            <div class="polaroid" style="transform: rotate(2deg);" onclick="openLightbox(this)">
+              <div class="washi" style="background: rgba(199, 249, 204, 0.9); left: 34%;"></div>
+              <div class="polaroid-img">
+                <img src="img16.png" alt="8">
+              </div>
+              <div class="polaroid-caption">🥰</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= KART 3: BİZİM MAHNIMIZ (XÜSUSİ DÜYMƏ) ================= -->
+      <div class="tab-panel" id="tab-2">
+        <div class="portal-container">
+          <div class="portal-badge">✨ ONLY FOR MY MAN ✨</div>
+          <div class="portal-title">✦ SENİ DüŞÜNENDE AĞLIMA GELEN MAHNI✦</div>
+          <div class="portal-desc">
+            "YOU'RE MY MANNN BABYYY💙"
+          </div>
+
+          <!-- YOUTUBE LINK DÜYMƏSİ -->
+          <a href="https://youtu.be/2ROnuyg_YbA?si=FRRbHQlpq-pwsS2H" target="_blank" rel="noopener noreferrer" class="magic-play-link" onclick="stopHappyBirthdayBGM()">
+            <span>▶</span>
+            <span>DOKUNSANA 🎶</span>
+          </a>
+
+          <div class="portal-footer">
+            (=^･ω･^=) Luvcat – He's My Man (Lyric Video) ✨
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
+    <div class="lightbox-box" onclick="event.stopPropagation()">
+      <img id="lightboxImg" src="" alt="Zoom">
+      <div class="lightbox-text" id="lightboxText"></div>
+      <button class="close-btn" onclick="closeLightbox()">BAĞLA ✖</button>
+    </div>
+  </div>
+
+  <script>
+    /* ================= 1. GİRİŞ & ŞİFRƏ ================= */
+    const CORRECT_PIN = "2510";
+    let currentPin = "";
+    let audioCtx = null;
+    let bdayPlaying = false;
+    let bdayTimeout = null;
+
+    function unlockAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('code') === CORRECT_PIN) {
+        document.getElementById('lockSubtitle').innerText = "Kod təsdiqləndi! Sürprizi aç 💙";
+        document.getElementById('pinSection').style.display = 'none';
+        document.getElementById('qrUnlockSection').style.display = 'block';
+      }
+    });
+
+    function updatePinDisplay() {
+      const display = document.getElementById('pinDisplay');
+      display.innerText = currentPin.length === 0 ? "----" : "•".repeat(currentPin.length) + "-".repeat(4 - currentPin.length);
+    }
+
+    function pressKey(num) {
+      unlockAudioContext();
+      if (currentPin.length < 4) {
+        currentPin += num;
+        playSoftTone(450 + currentPin.length * 60, 0.05);
+        updatePinDisplay();
+      }
+      if (currentPin.length === 4) {
+        setTimeout(checkPin, 180);
+      }
+    }
+
+    function clearPin() {
+      currentPin = "";
+      updatePinDisplay();
+    }
+
+    function checkPin() {
+      if (currentPin === CORRECT_PIN) {
+        unlockApp();
+      } else {
+        playSoftTone(180, 0.2, 'sawtooth');
+        const display = document.getElementById('pinDisplay');
+        display.classList.add('error-shake');
+        setTimeout(() => {
+          display.classList.remove('error-shake');
+          clearPin();
+        }, 400);
+      }
+    }
+
+    function unlockApp() {
+      unlockAudioContext();
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('main-dashboard').style.display = 'flex';
+      
+      startTypewriter();
+      startHappyBirthdayBGM();
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (document.getElementById('lock-screen').style.display !== 'none') {
+        if (e.key >= '0' && e.key <= '9') pressKey(e.key);
+        else if (e.key === 'Backspace') clearPin();
+        else if (e.key === 'Enter') checkPin();
+      }
+    });
+
+    /* ================= 2. CANLI HAPPY BIRTHDAY BGM ================= */
+    const N = {
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, Bb4: 466.16, C5: 523.25, D5: 587.33
+    };
+
+    const bdayScore = [
+      { f: N.C4, d: 0.28 }, { f: N.C4, d: 0.16 }, { f: N.D4, d: 0.44 }, { f: N.C4, d: 0.44 }, { f: N.F4, d: 0.44 }, { f: N.E4, d: 0.75 },
+      { f: N.C4, d: 0.28 }, { f: N.C4, d: 0.16 }, { f: N.D4, d: 0.44 }, { f: N.C4, d: 0.44 }, { f: N.G4, d: 0.44 }, { f: N.F4, d: 0.75 },
+      { f: N.C4, d: 0.28 }, { f: N.C4, d: 0.16 }, { f: N.C5, d: 0.44 }, { f: N.A4, d: 0.44 }, { f: N.F4, d: 0.44 }, { f: N.E4, d: 0.44 }, { f: N.D4, d: 0.7 },
+      { f: N.Bb4, d: 0.28 }, { f: N.Bb4, d: 0.16 }, { f: N.A4, d: 0.44 }, { f: N.F4, d: 0.44 }, { f: N.G4, d: 0.44 }, { f: N.F4, d: 0.95 }
+    ];
+
+    function playMusicBoxTone(freq, duration) {
+      try {
+        unlockAudioContext();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration * 1.3);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration * 1.3);
+      } catch(e) {}
+    }
+
+    function playSoftTone(freq, dur, type='sine') {
+      try {
+        unlockAudioContext();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch(e) {}
+    }
+
+    function playBdayStep(step = 0) {
+      if (!bdayPlaying) return;
+      if (step >= bdayScore.length) {
+        bdayTimeout = setTimeout(() => playBdayStep(0), 1600);
+        return;
+      }
+      const item = bdayScore[step];
+      playMusicBoxTone(item.f, item.d);
+      bdayTimeout = setTimeout(() => playBdayStep(step + 1), item.d * 1000 + 40);
+    }
+
+    function startHappyBirthdayBGM() {
+      clearTimeout(bdayTimeout);
+      bdayPlaying = true;
+      document.getElementById('bgmToggleBtn').innerText = '🎵 BGM: AÇIQ';
+      playBdayStep(0);
+    }
+
+    function stopHappyBirthdayBGM() {
+      bdayPlaying = false;
+      clearTimeout(bdayTimeout);
+      document.getElementById('bgmToggleBtn').innerText = '🔇 BGM: BAĞLI';
+    }
+
+    function toggleBdayMusic() {
+      if (bdayPlaying) stopHappyBirthdayBGM();
+      else startHappyBirthdayBGM();
+    }
+
+    /* ================= 3. TAB DƏYİŞMƏ ================= */
+    function switchTab(index) {
+      unlockAudioContext();
+      const buttons = document.querySelectorAll('.tab-btn');
+      const panels = document.querySelectorAll('.tab-panel');
+
+      buttons.forEach((btn, idx) => btn.classList.toggle('active', idx === index));
+      panels.forEach((panel, idx) => panel.classList.toggle('active', idx === index));
+    }
+
+    /* ================= 4. KART 1: TYPEWRITER MƏKTUB ================= */
+    const letterText = 
+`Ad günün mübarək həyatım birtanemm herşeyimmmm! 💙
+
+Səninlə tanış olduğum həyatıma girdiyin ilk gündən bəridir ki, çox xoşbəxtəm. Yaxşı ki , varımsan yaxşı ki həyatımdasan . Səni tanıdığım üçün çox şanslıyam birtanemmm.
+
+Arzu edirəm ki, yeni yaşında bütün xəyalların və arzuların gerçəkləşsin. Üzündən o gözəl təbəssüm heç vaxt əskik olmasın sevgilim.
+
+Yaxşı ki doğulmusan, yaxşı ki varsan və yaxşı ki mənim həyatımdasan! Səni hər şeydən çox sevirəm BİRTANEMMM! 💙✨(=^･ω･^=)
+
+HAPPY BİRTDAY TO YOUUU MY DEAR LOVEEE 💙`
+
+;
+
+    let typeIndex = 0;
+    function startTypewriter() {
+      const container = document.getElementById('letterText');
+      container.innerText = "";
+      typeIndex = 0;
+      function typeNext() {
+        if (typeIndex < letterText.length) {
+          container.innerText += letterText.charAt(typeIndex);
+          typeIndex++;
+          setTimeout(typeNext, 25);
+        }
+      }
+      typeNext();
+    }
+
+    /* ================= 5. KART 2: ŞƏKİL BÖYÜTMƏ ================= */
+    function openLightbox(card) {
+      const img = card.querySelector('img').src;
+      const caption = card.querySelector('.polaroid-caption').innerText;
+      document.getElementById('lightboxImg').src = img;
+      document.getElementById('lightboxText').innerText = caption;
+      document.getElementById('lightboxModal').style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightboxModal').style.display = 'none';
+    }
+
+    /* ================= 6. KAWAII HİSSƏCİKLƏR ================= */
+    const particlesContainer = document.getElementById('particles-container');
+    const kawaiiIcons = ['💙', '✨', '🐾', '⭐', '(=^･ω･^=)', '💤', '🎂', '☁️'];
+
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'kawaii-particle';
+      p.innerText = kawaiiIcons[Math.floor(Math.random() * kawaiiIcons.length)];
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (6 + Math.random() * 6) + 's';
+      p.style.animationDelay = (Math.random() * 5) + 's';
+      p.style.fontSize = (12 + Math.random() * 14) + 'px';
+      particlesContainer.appendChild(p);
+    }
+  </script>
+</body>
+</html>
